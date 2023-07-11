@@ -12,4 +12,4 @@ RUN apt install -y build-essential python3-dev  \
 
 STOPSIGNAL 2
 
-CMD ["uwsgi", "--http", "0.0.0.0:8000", "--master", "-p", "2", "-w", "hello:app"]
+CMD ["uwsgi", "--http", "0.0.0.0:8000", "--master", "-w", "hello:app", "-workers", "2"]
