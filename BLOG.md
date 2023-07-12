@@ -14,25 +14,29 @@
 ```bash
 
 # fastapi container
-docker run --init -itd \
+docker run --init --rm -itd \
     --name compare_fastapi \
-    -v $(pwd)/fastapi:/worksapce \
+    -v $(pwd)/fastapi:/fastapi \
     --cpus 4 \
+    --memory 512M \
+    --memory-swap -1 \
     compare:fastapi \
     bash
 
 # flask container
-docker run --init -itd \
+docker run --init --rm -itd \
      --name compare_flask \
-    -v $(pwd)/flask:/worksapce \
+    -v $(pwd)/flask:/flask \
     --cpus 4 \
+    --memory 512M \
+    --memory-swap -1 \
     compare:flask \
     bash
 
 # run fastapi app
-docker exec -it compare_fastapi uvicorn main:app --host 0.0.0.0 --port 8000
+docker exec -it compare_fastapi uvicorn main:app --host 0.0.0.0 --port 8000 --workers 2
 # in another terminal, run flask app
-docker exec -it compare_flask uwsgi --http 0.0.0.0:8000 --master -w hello:app
+docker exec -it compare_flask uwsgi -w hello:app --http 0.0.0.0:8000 --master --workers 2
 ```
 
 ## io bound case
